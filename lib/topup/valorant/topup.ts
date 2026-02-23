@@ -1,7 +1,9 @@
 "use server";
 
 import axios, { AxiosError } from "axios";
-const destRef = Date.now().toString();
+import { nanoid } from "nanoid";
+
+const destRef = nanoid(12); 
 type WepayStatusCode =
   | "00000"
   | "10001"
