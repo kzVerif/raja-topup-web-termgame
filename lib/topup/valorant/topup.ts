@@ -99,7 +99,7 @@ export async function topupValorant(
         password_hash:
           process.env.WEPAY_PASSWORD_HASH ??
           "be5e64bcf1d417debf5d7992c1bf6cd3",
-        resp_url: "https://yourdomain.com/api/wepay/callback",
+        resp_url: "http://119.59.124.159:9090/api/callback",
         dest_ref: "NamNM_Test",
         type: "gtopup",
         pay_to_amount: price.toString(),
