@@ -11,14 +11,26 @@ export async function GET() {
         password_hash: "ab6744cd558cb7966262343a2351351f",
         type: "balance_inquiry",
       },
+      // REMOVED the "multipart/form-data" header block
       {
         headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      },
+            "Content-Type": "application/json" // Optional: Axios does this automatically
+        }
+      }
     );
+    
+    console.log(balance.data); // Log just the data usually, not the whole object
+    
     return new Response(JSON.stringify(balance.data), { status: 200 });
   } catch (error) {
+    // Better error logging to see the response data if available
+    if (axios.isAxiosError(error)) {
+        console.error("Axios Error Response:", error.response?.data);
+        console.error("Axios Status:", error.response?.status);
+    } else {
+        console.error(error);
+    }
+    
     return new Response(JSON.stringify({ error: "Failed to fetch balance" }), {
       status: 500,
     });
