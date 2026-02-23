@@ -1,7 +1,7 @@
 "use server";
 
 import axios, { AxiosError } from "axios";
-
+const destRef = Date.now().toString();
 type WepayStatusCode =
   | "00000"
   | "10001"
@@ -100,7 +100,7 @@ export async function topupValorant(
           process.env.WEPAY_PASSWORD_HASH ??
           "be5e64bcf1d417debf5d7992c1bf6cd3",
         resp_url: "http://119.59.124.159:9090/api/callback",
-        dest_ref: "NamNM_Test",
+        dest_ref: destRef,
         type: "gtopup",
         pay_to_amount: price.toString(),
         pay_to_company: "VALORANT-D",
