@@ -55,8 +55,15 @@ export async function topupValorant(
   price: number,
   riotId: string
 ): Promise<TopupResult> {
+  // [DEBUG] สร้าง ID สำหรับ Request นี้ เพื่อให้ตาม Log ได้ง่าย
+  const reqId = crypto.randomUUID().slice(0, 5);
+  const logPrefix = `[Valo-Topup:${reqId}]`;
+
+  console.log(`${logPrefix} ▶ START Request: Price=${price}, RiotID=${riotId}`);
+
   try {
     if (!price || price <= 0) {
+      console.warn(`${logPrefix} ❌ Validation Error: Invalid Price`);
       return {
         success: false,
         error: "ราคาไม่ถูกต้อง",
@@ -64,6 +71,7 @@ export async function topupValorant(
     }
 
     if (!riotId?.trim()) {
+      console.warn(`${logPrefix} ❌ Validation Error: Missing Riot ID`);
       return {
         success: false,
         error: "ไม่พบ Riot ID",
@@ -71,30 +79,41 @@ export async function topupValorant(
     }
 
     const destRef = generateDestRef();
+    const endpoint = "https://www.wepay.in.th/client_api.json.php";
 
-    const response = await axios.post(
-      "https://www.wepay.in.th/client_api.json.php",
-      {
-        username: process.env.WEPAY_USERNAME,
-        password_hash: process.env.WEPAY_PASSWORD_HASH,
-        resp_url: process.env.WEPAY_CALLBACK_URL,
-        dest_ref: destRef,
-        type: "gtopup",
-        pay_to_amount: price.toString(),
-        pay_to_company: "VALORANT-D",
-        pay_to_ref1: riotId.trim(),
+    // [DEBUG] เตรียม Payload (แยกออกมาเพื่อ Log ก่อนส่ง)
+    const payload = {
+      username: "kanghunz",
+      password_hash: "be5e64bcf1d417debf5d7992c1bf6cd3",
+      resp_url: "http://119.59.124.159:9090/api/callback",
+      dest_ref: destRef,
+      type: "gtopup",
+      pay_to_amount: price.toString(),
+      pay_to_company: "VALORANT-D",
+      pay_to_ref1: riotId.trim(),
+    };
+
+    // [DEBUG] Log Payload (สำคัญ: ต้องปิดบัง Password)
+    console.log(`${logPrefix} 🚀 Sending to WePay...`, {
+      ...payload,// Mask sensitive data
+    });
+
+    const response = await axios.post(endpoint, payload, {
+      timeout: 15000,
+      headers: {
+        "Content-Type": "application/json",
       },
-      {
-        timeout: 15000,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        validateStatus: () => true, // สำคัญมาก
-      }
-    );
+      validateStatus: () => true,
+    });
 
     const httpStatus = response.status;
     const data = response.data;
+
+    // [DEBUG] Log ผลลัพธ์ดิบจาก API
+    console.log(`${logPrefix} 📥 Received Response:`, {
+      httpStatus,
+      data: JSON.stringify(data),
+    });
 
     const wepayCode = data?.code?.toString();
     const message =
@@ -104,6 +123,7 @@ export async function topupValorant(
 
     // ถ้า Wepay success
     if (httpStatus === 200 && wepayCode === "00000") {
+      console.log(`${logPrefix} ✅ SUCCESS: Transaction completed`);
       return {
         success: true,
         httpStatus,
@@ -114,6 +134,10 @@ export async function topupValorant(
     }
 
     // fail
+    console.warn(`${logPrefix} ⚠️ FAILED: API logic error`, {
+      message,
+      wepayCode,
+    });
     return {
       success: false,
       httpStatus,
@@ -124,6 +148,13 @@ export async function topupValorant(
     };
   } catch (err) {
     const error = err as AxiosError<any>;
+
+    // [DEBUG] Log กรณีเกิด Exception (Network error, Timeout ฯลฯ)
+    console.error(`${logPrefix} 💥 EXCEPTION:`, {
+      message: error.message,
+      responseStatus: error.response?.status,
+      responseData: error.response?.data,
+    });
 
     return {
       success: false,
