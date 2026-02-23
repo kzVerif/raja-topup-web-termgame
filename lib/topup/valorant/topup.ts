@@ -18,7 +18,7 @@ export async function topupValorant(price: number, riotId: string): Promise<Topu
 
     // 1) สร้างรายการ PENDING ใน DB ก่อน เพื่อให้ callback หาเจอ
     const destRef = generateDestRef();
-    console.log(destRef);
+    // console.log(destRef);
     
 
     // 2) ยิงไป Wepay โดยใช้ dest_ref ที่ไม่ซ้ำแน่นอน
