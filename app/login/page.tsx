@@ -1,0 +1,10 @@
+import LoginPage from '@/components/Auth/LoginPage'
+import React from 'react'
+
+export default function page() {
+  return (
+    <div className='container'>
+        <LoginPage/>
+    </div>
+  )
+}

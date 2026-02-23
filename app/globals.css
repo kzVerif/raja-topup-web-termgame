@@ -1,26 +1,41 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-ibm-plex), sans-serif;
   --font-mono: var(--font-geist-mono);
 }
+body {
+  min-height: 100vh;
+}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+.container {
+  animation: slideIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  width: 100%; /* แนะนำให้ใส่ไว้เพื่อให้ขยายเต็มจอมือถือก่อนเจอ max-width */
+  max-width: var(--container-7xl);
+  margin-inline: auto;
+  
+  /* 1. Mobile First: ใส่ค่าเริ่มต้นก่อน (16px) */
+  padding-inline: calc(var(--spacing) * 4); 
+
+  /* 2. Tablet (640pxขึ้นไป): เพิ่มเป็น 24px */
+  @media (width >= 40rem) {
+    padding-inline: calc(var(--spacing) * 6);
+  }
+
+  /* 3. Desktop (1024pxขึ้นไป): เพิ่มเป็น 32px */
+  @media (width >= 64rem) {
+    padding-inline: calc(var(--spacing) * 8);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

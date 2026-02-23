@@ -1,0 +1,225 @@
+"use client";
+
+import Image from "next/image";
+import { useState } from "react";
+import {
+  Gamepad2,
+  User,
+  CreditCard,
+  ShoppingBag,
+  CheckCircle2,
+} from "lucide-react";
+
+interface ffPackages {
+  id: number;
+  price: number;
+  amount: string;
+  isSpecial?: boolean;
+}
+
+export default function FreeFireTopup() {
+  const [selectedPackage, setSelectedPackage] = useState<ffPackages>();
+  const [openId, setOpenId] = useState("");
+
+  const packages: ffPackages[] = [
+    // แพ็กเกจพิเศษจาก JSON
+    { id: 1, price: 90, amount: "BP Card (บูย่าห์พาส)", isSpecial: true },
+    { id: 2, price: 33.3, amount: "สมาชิกเพชรมินิรายสัปดาห์", isSpecial: true },
+    { id: 3, price: 67, amount: "สมาชิกเพชรรายสัปดาห์", isSpecial: true },
+    { id: 4, price: 300, amount: "สมาชิกเพชรรายเดือน", isSpecial: true },
+    // แพ็กเกจเพชรปกติ
+    { id: 5, price: 10, amount: "33 Diamond" },
+    { id: 6, price: 20, amount: "68 Diamond" },
+    { id: 7, price: 50, amount: "172 Diamond" },
+    { id: 8, price: 90, amount: "310 Diamond" },
+    { id: 9, price: 150, amount: "517 Diamond" },
+    { id: 10, price: 200, amount: "690 Diamond" },
+    { id: 11, price: 300, amount: "1,052 Diamond" },
+    { id: 12, price: 500, amount: "1,801 Diamond" },
+    { id: 13, price: 1000, amount: "3,698 Diamond" },
+  ];
+
+  return (
+    <main className="min-h-screen bg-[#f8f9fc] py-12">
+      <div className="container max-w-6xl">
+        {/* --- GAME HEADER --- */}
+        <div className="bg-white rounded-[2.5rem] p-8 mb-8 border border-gray-100 shadow-sm flex flex-col md:flex-row gap-8 items-center">
+          <div className="relative w-32 h-32 md:w-40 md:h-40 shrink-0 overflow-hidden rounded-[2rem] shadow-lg">
+            <Image
+              src="/topup/genshin.png" // เปลี่ยนเป็น path รูป Free Fire ของคุณ
+              alt="Genshin Impact"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div className="space-y-3 text-center md:text-left">
+            <h1 className="text-3xl md:text-4xl font-black text-gray-900">
+              Genshin Impact
+            </h1>
+            <p className="text-gray-500 max-w-xl leading-relaxed">
+              ครองสมรภูมิในฐานะราชาผู้ไร้เทียมทาน
+              เติมเพชรเพื่อปลดล็อกสกินสุดแรร์, ตัวละครสุดแกร่ง
+              และอาวุธระดับตำนาน บงการทุกการเคลื่อนไหว
+              พลิกทุกสถานการณ์สู่ชัยชนะอันยิ่งใหญ่แห่ง Free Fire
+            </p>
+            <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
+              <span className="px-4 py-1.5 bg-green-50 text-green-600 rounded-full text-xs font-bold flex items-center gap-1.5">
+                <CheckCircle2 size={14} /> ระบบอัตโนมัติ
+              </span>
+              <span className="px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-xs font-bold flex items-center gap-1.5">
+                <Gamepad2 size={14} /> เข้าเกมทันที
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* --- LEFT COLUMN: INPUTS --- */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* STEP 1: PLAYER ID */}
+            <section className="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-indigo-600 text-white rounded-xl flex items-center justify-center font-bold">
+                  1
+                </div>
+                <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                  <User size={20} className="text-indigo-600" /> กรอก ID ผู้เล่น
+                </h2>
+              </div>
+              <div className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="กรอก ID ผู้เล่นของคุณ (เช่น 1234567890)"
+                  value={openId}
+                  onChange={(e) => setOpenId(e.target.value)}
+                  className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-lg font-mono"
+                />
+                <p className="text-sm text-gray-400 font-medium italic">
+                  * ตรวจสอบ ID ให้ถูกต้องเพื่อการทำรายการที่รวดเร็ว
+                </p>
+              </div>
+            </section>
+
+            {/* STEP 2: PACKAGES */}
+            <section className="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-indigo-600 text-white rounded-xl flex items-center justify-center font-bold">
+                  2
+                </div>
+                <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                  <ShoppingBag size={20} className="text-indigo-600" />{" "}
+                  เลือกแพ็กเกจที่ต้องการ
+                </h2>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {packages.map((pkg) => (
+                  <button
+                    key={pkg.id}
+                    onClick={() => setSelectedPackage(pkg)}
+                    className={`relative p-5 rounded-3xl border-2 transition-all text-left space-y-2 group flex flex-col justify-between
+                      ${
+                        selectedPackage?.id === pkg.id
+                          ? "border-indigo-600 bg-indigo-50/50 shadow-md shadow-indigo-100"
+                          : "border-gray-50 bg-gray-50 hover:border-indigo-200 hover:bg-white"
+                      } ${pkg.isSpecial ? "border-orange-200" : ""}`}
+                  >
+                    <div>
+                      {pkg.isSpecial && (
+                        <span className="text-[10px] bg-orange-500 text-white px-2 py-0.5 rounded-full font-bold mb-2 inline-block uppercase">
+                          Special
+                        </span>
+                      )}
+                      <p className="text-sm font-bold text-gray-500 group-hover:text-indigo-600 transition-colors leading-tight">
+                        {pkg.amount}
+                      </p>
+                    </div>
+                    <p className="text-xl font-black text-gray-800 mt-2">
+                      ฿{pkg.price.toLocaleString()}
+                    </p>
+                    {selectedPackage?.id === pkg.id && (
+                      <div className="absolute top-3 right-3 text-indigo-600">
+                        <CheckCircle2 size={20} fill="white" />
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </section>
+          </div>
+
+          {/* --- RIGHT COLUMN: SUMMARY --- */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-24 bg-white rounded-[2rem] border border-gray-100 shadow-xl shadow-gray-200/40 overflow-hidden">
+              <div className="bg-indigo-600 p-6 text-white text-center">
+                <h3 className="font-bold text-lg uppercase tracking-wider">
+                  สรุปคำสั่งซื้อ
+                </h3>
+              </div>
+              <div className="p-8 space-y-6">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-gray-500 font-medium font-mono uppercase">
+                    Game
+                  </span>
+                  <span className="text-gray-900 font-bold">
+                    Genshin Impact
+                  </span>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-gray-500 font-medium font-mono uppercase">
+                    ID ผู้เล่น
+                  </span>
+                  <span
+                    className={`font-bold ${openId ? "text-gray-900" : "text-red-400 font-mono"}`}
+                  >
+                    {openId || "REQUIRED"}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-gray-500 font-medium font-mono uppercase">
+                    แพ็กเกจ
+                  </span>
+                  <span
+                    className={`font-bold text-right ${selectedPackage ? "text-gray-900" : "text-red-400 font-mono"}`}
+                  >
+                    {selectedPackage ? selectedPackage.amount : "NOT SELECTED"}
+                  </span>
+                </div>
+
+                <hr className="border-dashed border-gray-100" />
+
+                <div className="flex justify-between items-end">
+                  <span className="text-gray-500 font-bold uppercase text-xs">
+                    ราคาสุทธิ
+                  </span>
+                  <span className="text-3xl font-black text-indigo-600">
+                    ฿
+                    {selectedPackage
+                      ? selectedPackage.price.toLocaleString()
+                      : "0"}
+                  </span>
+                </div>
+
+                <button
+                  disabled={!openId || !selectedPackage}
+                  className="w-full py-4 bg-indigo-600 disabled:bg-gray-200 disabled:cursor-not-allowed text-white font-black text-lg rounded-2xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:-translate-y-1 transition-all active:scale-95 flex items-center justify-center gap-2 uppercase tracking-tighter"
+                >
+                  <CreditCard size={20} />
+                  ยืนยันการสั่งซื้อ
+                </button>
+
+                <p className="text-[10px] text-center text-gray-400 leading-relaxed">
+                  เมื่อคลิกยืนยัน คุณยอมรับ{" "}
+                  <span className="underline cursor-pointer">
+                    เงื่อนไขการใช้บริการ
+                  </span>{" "}
+                  <br />
+                  กรุณาตรวจสอบ ID ให้ถูกต้องก่อนชำระเงิน
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}
