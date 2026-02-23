@@ -9,6 +9,8 @@ import {
   ShoppingBag,
   CheckCircle2,
 } from "lucide-react";
+import { toast } from "sonner";
+import { topupValorant } from "@/lib/topup/valorant/topup";
 
 interface TftPackage {
   id: number;
@@ -27,11 +29,33 @@ export default function TftMobileTopup() {
     { id: 3, price: 520, amount: "2,050 Valorant Points" },
     { id: 4, price: 920, amount: "3,650 Valorant Points" },
     { id: 5, price: 1320, amount: "5,350 Valorant Points" },
-  { id: 6, price: 2640, amount: "11,000 Valorant Points" },
+    { id: 6, price: 2640, amount: "11,000 Valorant Points" },
   ];
 
-  console.log(selectedPackage,riotId);
-  
+  const handleTopup = async () => {
+    if (!riotId || !selectedPackage) {
+      toast.error("กรุณากรอก Riot ID และเลือกแพ็กเกจ");
+      return;
+    }
+
+    const promise = topupValorant(selectedPackage.price, riotId);
+
+    toast.promise(promise, {
+      loading: "กำลังส่งคำสั่งเติมเงิน...",
+
+      success: (res) => {
+        if (!res.success) {
+          throw new Error(res.error);
+        }
+
+        return "สั่งซื้อสำเร็จ! กำลังดำเนินการเติมเงิน...";
+      },
+
+      error: (err) => {
+        return err.message || "เกิดข้อผิดพลาด";
+      },
+    });
+  };
 
   return (
     <main className="min-h-screen bg-[#f8f9fc] py-12">
@@ -52,11 +76,12 @@ export default function TftMobileTopup() {
             </h1>
             {/* คำบรรยายสไตล์ Tactician ผู้บ้าคลั่ง */}
             <p className="text-gray-500 max-w-xl leading-relaxed">
-              สมรภูมิ Future Earth รอคุณอยู่! อย่าให้กระสุนหมดกลางไฟต์ หรือพลาดสกิน Exclusive ใน Night Market... 
-              เติม VP วันนี้เพื่อปลดล็อก Battle Pass และสกินระดับ Ultra Edition! จงเล็งให้แม่นแล้วยิงให้คม 
-              ประกาศศักดา Clutch God ให้ก้องโลก!
+              สมรภูมิ Future Earth รอคุณอยู่! อย่าให้กระสุนหมดกลางไฟต์
+              หรือพลาดสกิน Exclusive ใน Night Market... เติม VP
+              วันนี้เพื่อปลดล็อก Battle Pass และสกินระดับ Ultra Edition!
+              จงเล็งให้แม่นแล้วยิงให้คม ประกาศศักดา Clutch God ให้ก้องโลก!
             </p>
-            
+
             {/* Badges */}
             <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
               <span className="px-4 py-1.5 bg-green-50 text-green-600 rounded-full text-xs font-bold flex items-center gap-1.5">
@@ -91,7 +116,8 @@ export default function TftMobileTopup() {
                   className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-lg font-mono"
                 />
                 <p className="text-sm text-gray-400 font-medium italic">
-                  * กรุณากรอก Riot ID ให้ครบถ้วน (ชื่อ#Tag) สามารถดูได้ที่โปรไฟล์ในเกม
+                  * กรุณากรอก Riot ID ให้ครบถ้วน (ชื่อ#Tag)
+                  สามารถดูได้ที่โปรไฟล์ในเกม
                 </p>
               </div>
             </section>
@@ -152,7 +178,7 @@ export default function TftMobileTopup() {
                     เกม
                   </span>
                   <span className="text-gray-900 font-bold truncate">
-                    TFT Mobile
+                    Valorant
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
@@ -165,7 +191,7 @@ export default function TftMobileTopup() {
                     {riotId || "REQUIRED"}
                   </span>
                 </div>
-                
+
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-gray-500 font-medium font-mono uppercase">
                     แพ็กเกจ
@@ -192,6 +218,7 @@ export default function TftMobileTopup() {
                 </div>
 
                 <button
+                  onClick={handleTopup}
                   disabled={!riotId || !selectedPackage}
                   className="w-full py-4 bg-indigo-600 disabled:bg-gray-200 disabled:cursor-not-allowed text-white font-black text-lg rounded-2xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:-translate-y-1 transition-all active:scale-95 flex items-center justify-center gap-2 uppercase tracking-tighter"
                 >

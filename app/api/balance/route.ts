@@ -8,7 +8,7 @@ export async function GET() {
       "https://www.wepay.in.th/client_api.json.php",
       {
         username: "kanghunz",
-        password_hash: "ab6744cd558cb7966262343a2351351f",
+        password_hash: "be5e64bcf1d417debf5d7992c1bf6cd3",
         type: "balance_inquiry",
       },
       // REMOVED the "multipart/form-data" header block
