@@ -5,7 +5,7 @@ import crypto from "crypto";
 // ─── Config ───────────────────────────────────────────────────────────────────
 const WEPAY_URL      = "https://www.wepay.in.th/client_api.json.php";
 const WEPAY_USERNAME = "kanghunz";
-const WEPAY_PASSWORD = "be5e64bcf1d417debf5d7992c1bf6cd3"; // ← MD5 hash แล้ว ไม่ต้อง hash ซ้ำ
+const WEPAY_PASSWORD = "kanghunz12"; // ← MD5 hash แล้ว ไม่ต้อง hash ซ้ำ
 const RESP_URL       = "http://119.59.124.159:9090/api/callback";
 
 // ─── Valid denominations for MY (my by NT) ────────────────────────────────────
